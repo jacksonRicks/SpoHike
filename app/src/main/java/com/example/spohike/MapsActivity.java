@@ -62,7 +62,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         mMap.addMarker(new MarkerOptions().position(gonzaga).title("Home")
                 .icon(BitmapDescriptorFactory.fromResource(R.drawable.user)));
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(gonzaga));
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(gonzaga, 10.0f));
     }
 
     public void receivedInterestingPhotos(List<Trail> trail) {
