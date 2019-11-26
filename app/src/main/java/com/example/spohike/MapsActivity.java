@@ -1,7 +1,12 @@
 package com.example.spohike;
 
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentActivity;
 
+import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.widget.TextView;
 
@@ -9,6 +14,8 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptor;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
@@ -21,6 +28,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     int currPhotoIndex = -1;
     String lat;
     String lon;
+    LatLng gonzaga = new LatLng(47.6664,-117.40235);
 
 
     @Override
@@ -51,9 +59,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mMap = googleMap;
 
         // Add a marker in Sydney and move the camera
-        LatLng sydney = new LatLng(-34, 151);
-        mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
+
+        mMap.addMarker(new MarkerOptions().position(gonzaga).title("Home")
+                .icon(BitmapDescriptorFactory.fromResource(R.drawable.user)));
+        mMap.moveCamera(CameraUpdateFactory.newLatLng(gonzaga));
     }
 
     public void receivedInterestingPhotos(List<Trail> trail) {
@@ -87,5 +96,14 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             //FlickrAPI flickrAPI = new FlickrAPI(this);
             //flickrAPI.fetchPhotoBitmap(interestingPhoto.getPhotoURL());
         }
+    }
+
+    private BitmapDescriptor bitmapDescriptorFromVector(Context context, int vectorResId) {
+        Drawable vectorDrawable = ContextCompat.getDrawable(context, vectorResId);
+        vectorDrawable.setBounds(0, 0, vectorDrawable.getIntrinsicWidth(), vectorDrawable.getIntrinsicHeight());
+        Bitmap bitmap = Bitmap.createBitmap(vectorDrawable.getIntrinsicWidth(), vectorDrawable.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(bitmap);
+        vectorDrawable.draw(canvas);
+        return BitmapDescriptorFactory.fromBitmap(bitmap);
     }
 }
