@@ -243,4 +243,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     public void refresh(View view){
         recreate();
     }
+
+    // GS: added after class
+    public void receivedPhotoBitmap(Bitmap bitmap) {
+        //ImageView imageView = findViewById(R.id.imageView);
+        //imageView.setImageBitmap(bitmap);
+    }
 }
