@@ -208,12 +208,13 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         HikingAPI hikingAPI = new HikingAPI(this);
         hikingAPI.fetchTrailList(latitude,longitude);
 
-        mMap.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener(){
+        mMap.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
             @Override
             public void onInfoWindowClick(Marker marker) {
+                Log.d("LOL", marker.getTitle());
                 for (Trail trail : TrailList) {
                     // call Book's containText method
-                    if (trail.equals(marker.getTitle())) {
+                    if (trail.getName().equals(marker.getTitle())) {
                         // assuming Book has a decent `toString()` override:
                         Intent intent = new Intent(MapsActivity.this, SingleTrail.class);
                         intent.putExtra("trail", trail);
@@ -221,6 +222,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     }
                 }
             }
+
         });
     }
 
