@@ -9,6 +9,7 @@ import android.Manifest;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -37,6 +38,7 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
@@ -73,6 +75,22 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         locationRequest.setInterval(10000);
         locationRequest.setFastestInterval(5000);
         locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+
+        mMap.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener(){
+            @Override
+            public void onInfoWindowClick(Marker marker) {
+                for (Trail trail : TrailList) {
+                    // call Book's containText method
+                    if (trail.equals(marker.getTitle())) {
+                        // assuming Book has a decent `toString()` override:
+                        Intent intent = new Intent(MapsActivity.this, SingleTrail.class);
+                        intent.putExtra("trail", trail);
+                        startActivity(intent);
+                    }
+                }
+            }
+        });
+
 
 //        HikingAPI hikingAPI = new HikingAPI(this);
 //        hikingAPI.fetchTrailList(47.666,-117.40235);
