@@ -20,6 +20,7 @@ import android.location.LocationManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -43,6 +44,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 
+import java.io.Serializable;
 import java.util.List;
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback, GoogleMap.OnMyLocationClickListener {
@@ -76,20 +78,19 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         locationRequest.setFastestInterval(5000);
         locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
 
-        mMap.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener(){
+        Button trailList = (Button) findViewById(R.id.button2);
+        trailList.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onInfoWindowClick(Marker marker) {
-                for (Trail trail : TrailList) {
-                    // call Book's containText method
-                    if (trail.equals(marker.getTitle())) {
-                        // assuming Book has a decent `toString()` override:
-                        Intent intent = new Intent(MapsActivity.this, SingleTrail.class);
-                        intent.putExtra("trail", trail);
-                        startActivity(intent);
-                    }
-                }
+            public void onClick(View v) {
+                Intent intent = new Intent(MapsActivity.this, HikeListActivity.class);
+                Bundle args = new Bundle();
+                args.putSerializable("ARRAYLIST",(Serializable)TrailList);
+                intent.putExtra("BUNDLE",args);
+                startActivity(intent);
+                //intent.putExtra("trailList", TrailList);
             }
         });
+
 
 
 //        HikingAPI hikingAPI = new HikingAPI(this);
@@ -206,6 +207,21 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         HikingAPI hikingAPI = new HikingAPI(this);
         hikingAPI.fetchTrailList(latitude,longitude);
+
+        mMap.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener(){
+            @Override
+            public void onInfoWindowClick(Marker marker) {
+                for (Trail trail : TrailList) {
+                    // call Book's containText method
+                    if (trail.equals(marker.getTitle())) {
+                        // assuming Book has a decent `toString()` override:
+                        Intent intent = new Intent(MapsActivity.this, SingleTrail.class);
+                        intent.putExtra("trail", trail);
+                        startActivity(intent);
+                    }
+                }
+            }
+        });
     }
 
     public void receivedInterestingPhotos(List<Trail> trail) {

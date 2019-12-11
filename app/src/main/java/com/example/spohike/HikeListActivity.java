@@ -1,14 +1,18 @@
 package com.example.spohike;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.GridLayout;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,9 +31,27 @@ public class HikeListActivity extends AppCompatActivity {
         GridLayout.LayoutParams layoutParams = new GridLayout.LayoutParams();
         layoutParams.width = GridLayout.LayoutParams.MATCH_PARENT;
         layoutParams.height = GridLayout.LayoutParams.WRAP_CONTENT;
-        trailList = (ArrayList<Trail>) getIntent().getSerializableExtra("trailList");
+
+        //trailList = (ArrayList<Trail>) getIntent().getSerializableExtra("trailList");
+        Intent intent = getIntent();
+        Bundle args = intent.getBundleExtra("BUNDLE");
+        trailList = (ArrayList<Trail>) args.getSerializable("ARRAYLIST");
+
         final ListView listView = new ListView(this);
-        arrayAdapter = new ArrayAdapter<Trail>(this, android.R.layout.simple_list_item_1, trailList);
+        arrayAdapter = new ArrayAdapter<Trail>(this, android.R.layout.simple_list_item_2, android.R.id.text1, trailList){
+
+            @NonNull
+            @Override
+            public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
+                View view =  super.getView(position, convertView, parent);
+                TextView text1 = (TextView) view.findViewById(android.R.id.text1);
+                TextView text2 = (TextView) view.findViewById(android.R.id.text2);
+                Trail trail = trailList.get(position);
+                text1.setText(trail.getName());
+                text2.setText("Stars: " + trail.getStars());
+                return view;
+            }
+        };
         listView.setAdapter(arrayAdapter);
         gridLayout.addView(listView);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -42,6 +64,3 @@ public class HikeListActivity extends AppCompatActivity {
         });
     }
 }
-
-
-//comment

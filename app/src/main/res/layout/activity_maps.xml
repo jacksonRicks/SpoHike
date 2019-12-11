@@ -18,11 +18,25 @@
     tools:context=".MapsActivity" />
 
     <Button
+        android:id="@+id/button2"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_margin="1dp"
+        android:layout_weight="1"
+        android:background="#81C784"
+        android:text="View hikes as list"
+        android:textColor="#FFFFFF"
+        android:textSize="14sp" />
+
+    <Button
         android:id="@+id/button"
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:layout_margin="1dp"
         android:layout_weight="1"
+        android:background="#81C784"
+        android:onClick="refresh"
         android:text="On the move? Click to see hikes near you"
-        android:onClick="refresh"/>
+        android:textColor="#FFFFFF" />
 
 </LinearLayout>
