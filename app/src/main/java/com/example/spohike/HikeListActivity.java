@@ -57,9 +57,10 @@ public class HikeListActivity extends AppCompatActivity {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intent = new Intent();
-                Trail trailSelected = trailList.get(position);
-                intent.putExtra("trail", trailSelected);
+                        Intent intent = new Intent(HikeListActivity.this, SingleTrail.class);
+                        Trail trail = (Trail) listView.getItemAtPosition(position);
+                        intent.putExtra("trail", trail);
+                        startActivity(intent);
             }
         });
     }

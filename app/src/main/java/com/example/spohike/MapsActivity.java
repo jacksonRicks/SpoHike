@@ -87,7 +87,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 args.putSerializable("ARRAYLIST",(Serializable)TrailList);
                 intent.putExtra("BUNDLE",args);
                 startActivity(intent);
-                //intent.putExtra("trailList", TrailList);
             }
         });
 
@@ -211,11 +210,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mMap.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
             @Override
             public void onInfoWindowClick(Marker marker) {
-                Log.d("LOL", marker.getTitle());
                 for (Trail trail : TrailList) {
-                    // call Book's containText method
                     if (trail.getName().equals(marker.getTitle())) {
-                        // assuming Book has a decent `toString()` override:
                         Intent intent = new Intent(MapsActivity.this, SingleTrail.class);
                         intent.putExtra("trail", trail);
                         startActivity(intent);
