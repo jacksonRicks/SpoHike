@@ -52,7 +52,7 @@ public class SingleTrail extends AppCompatActivity {
         name.setText(trail.getName());
         stars.setText("Stars: " + trail.getStars());
         summary.setText(trail.getSummary());
-        location.setText("Lon: " + trail.getLongitude());
+        location.setText("Lat: " + trail.getLatitude() + "\n" + "Lon: " + trail.getLongitude());
         length.setText(trail.getLength() + " miles");
         new DownloadImageTask((ImageView) findViewById(R.id.image)).execute(trail.getPhotoURL());
     }
