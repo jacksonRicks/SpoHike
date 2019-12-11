@@ -6,12 +6,16 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentActivity;
 
 import android.Manifest;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.drawable.Drawable;
 import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.TextView;
@@ -169,7 +173,48 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
 
         fusedLocationProviderClient.getLastLocation();
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(gonzaga, 10.0f );
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(gonzaga, 10.0f ));
+
+
+
+        LocationManager lm = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
+        //Location location = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+
+
+        lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, 2000, 10, new LocationListener() {
+                    @Override
+                    public void onLocationChanged(Location location) {
+                        float[] dist = new float[1];
+                        final double longitude = location.getLongitude();
+                        final double latitude = location.getLatitude();
+                        Location.distanceBetween(47.666, -117.40235, latitude, longitude, dist);
+                        if(dist[0]/1000 > 50){
+                            AlertDialog.Builder alertBuilder = new AlertDialog.Builder(MapsActivity.this);
+                            alertBuilder.setTitle("Outside Spokane")
+                                    .setMessage("You are currently not in Spokane. Come back to Spokane soon to experience some of these great hikes!")
+                                    .setPositiveButton("Okay", null);
+                            alertBuilder.show();
+                        }
+                    }
+
+                    @Override
+                    public void onStatusChanged(String provider, int status, Bundle extras) {
+
+                    }
+
+                    @Override
+                    public void onProviderEnabled(String provider) {
+
+                    }
+
+                    @Override
+                    public void onProviderDisabled(String provider) {
+
+                    }
+                });
+
+//        double longitude = location.getLongitude();
+//        double latitude = location.getLatitude();
 
     }
 
