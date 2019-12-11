@@ -57,6 +57,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     static final int MY_LOCATION_CODE = 1;
 
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -145,7 +146,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
 
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) ==
-                PackageManager.PERMISSION_GRANTED){
+                PackageManager.PERMISSION_GRANTED) {
             // we have users permission to access their location
             fusedLocationProviderClient.requestLocationUpdates(locationRequest,
                     locationCallback,
@@ -163,59 +164,35 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     });
 
             mMap.setMyLocationEnabled(true);
-        }
-        else {
+        } else {
             // we don't have permission and need to request it
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
                     MY_LOCATION_CODE);
         }
 
 
-
         fusedLocationProviderClient.getLastLocation();
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(gonzaga, 10.0f ));
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(gonzaga, 10.0f));
 
 
-
-        LocationManager lm = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
-        //Location location = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-
-
-        lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, 2000, 10, new LocationListener() {
-                    @Override
-                    public void onLocationChanged(Location location) {
-                        float[] dist = new float[1];
-                        final double longitude = location.getLongitude();
-                        final double latitude = location.getLatitude();
-                        Location.distanceBetween(47.666, -117.40235, latitude, longitude, dist);
-                        if(dist[0]/1000 > 50){
-                            AlertDialog.Builder alertBuilder = new AlertDialog.Builder(MapsActivity.this);
-                            alertBuilder.setTitle("Outside Spokane")
-                                    .setMessage("You are currently not in Spokane. Come back to Spokane soon to experience some of these great hikes!")
-                                    .setPositiveButton("Okay", null);
-                            alertBuilder.show();
+        LocationManager lm = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        Location location = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+        float[] dist = new float[1];
+        double longitude = location.getLongitude();
+        double latitude = location.getLatitude();
+        Location.distanceBetween(47.666, -117.40235, latitude, longitude, dist);
+        if (dist[0] / 1000 > 50) {
+            AlertDialog.Builder alertBuilder = new AlertDialog.Builder(MapsActivity.this);
+            alertBuilder.setTitle("Outside Spokane")
+                    .setMessage("You are currently not in Spokane. Come back to Spokane soon to experience some of the area's great hikes!")
+                    .setPositiveButton("Okay", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            finish();
                         }
-                    }
-
-                    @Override
-                    public void onStatusChanged(String provider, int status, Bundle extras) {
-
-                    }
-
-                    @Override
-                    public void onProviderEnabled(String provider) {
-
-                    }
-
-                    @Override
-                    public void onProviderDisabled(String provider) {
-
-                    }
-                });
-
-//        double longitude = location.getLongitude();
-//        double latitude = location.getLatitude();
-
+                    });
+            alertBuilder.show();
+        }
     }
 
     public void receivedInterestingPhotos(List<Trail> trail) {
