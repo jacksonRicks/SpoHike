@@ -1,7 +1,9 @@
 package com.example.spohike;
 
 
-public class Trail {
+import java.io.Serializable;
+
+public class Trail implements Serializable {
     String id;
     String name;
     String summary;
