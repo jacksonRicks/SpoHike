@@ -7,13 +7,20 @@ public class Trail {
     String summary;
     String longitude;
     String latitude;
+    String stars;
+    String length;
+    String photoURL;
 
-    public Trail(String id, String name, String summary, String longitude, String latitude) {
+    public Trail(String id, String name, String summary, String longitude, String latitude, String stars, String length, String photoURL) {
         this.id = id;
         this.name = name;
         this.summary = summary;
         this.longitude = longitude;
         this.latitude = latitude;
+        this.stars = stars;
+        this.length = length;
+        this.photoURL = photoURL;
+
     }
 
     @Override
@@ -24,6 +31,8 @@ public class Trail {
                 ", summary='" + summary + '\'' +
                 ", latitude='" + latitude + '\'' +
                 ", longitude='" + longitude + '\'' +
+                ", stars='" + stars + '\'' +
+                ", longitude='" + length + '\'' +
                 '}';
     }
 
@@ -65,5 +74,29 @@ public class Trail {
 
     public void setLatitude(String latitude) {
         this.latitude = latitude;
+    }
+
+    public String getStars() {
+        return stars;
+    }
+
+    public void setStars(String stars) {
+        this.stars = stars;
+    }
+
+    public String getLength() {
+        return length;
+    }
+
+    public void setLength(String length) {
+        this.length = length;
+    }
+
+    public String getPhotoURL() {
+        return photoURL;
+    }
+
+    public void setPhotoURL(String photoURL) {
+        this.photoURL = photoURL;
     }
 }

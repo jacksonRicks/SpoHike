@@ -149,7 +149,10 @@ public class HikingAPI {
                 String summary = singleTrailObject.getString("summary");
                 String longitude = singleTrailObject.getString("longitude");
                 String latitude = singleTrailObject.getString("latitude");
-                trail = new Trail(id, name, summary, longitude, latitude);
+                String stars = singleTrailObject.getString("stars");
+                String length = singleTrailObject.getString("length");
+                String photoURL = singleTrailObject.getString("imgMedium");
+                trail = new Trail(id, name, summary, longitude, latitude, stars, length, photoURL);
             } catch (JSONException e) {
                 // do nothing
             }
@@ -173,7 +176,7 @@ public class HikingAPI {
         }
     }
 
-   /* // GS: added after class
+   // GS: added after class
     public void fetchPhotoBitmap(String photoURL) {
         PhotoRequestAsyncTask asyncTask = new PhotoRequestAsyncTask();
         asyncTask.execute(photoURL);
@@ -186,8 +189,6 @@ public class HikingAPI {
         protected void onPreExecute() {
             super.onPreExecute();
 
-            ProgressBar progressBar = (ProgressBar) mainActivity.findViewById(R.id.progressBar);
-            progressBar.setVisibility(View.VISIBLE);
         }
 
         @Override
@@ -214,11 +215,10 @@ public class HikingAPI {
         protected void onPostExecute(Bitmap bitmap) {
             super.onPostExecute(bitmap);
 
-            ProgressBar progressBar = (ProgressBar) mainActivity.findViewById(R.id.progressBar);
-            progressBar.setVisibility(View.GONE);
-            mainActivity.receivedPhotoBitmap(bitmap);
+
+            //mainActivity.receivedPhotoBitmap(bitmap);
         }
     }
 
-    */
+
 }
