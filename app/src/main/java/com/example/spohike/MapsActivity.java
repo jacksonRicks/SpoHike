@@ -18,6 +18,7 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -73,17 +74,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         locationRequest.setFastestInterval(5000);
         locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
 
-
-
-
-
-
-
-
-
-
-        HikingAPI hikingAPI = new HikingAPI(this);
-        hikingAPI.fetchTrailList(47.666,-117.40235);
+//        HikingAPI hikingAPI = new HikingAPI(this);
+//        hikingAPI.fetchTrailList(47.666,-117.40235);
     }
 
 
@@ -193,6 +185,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     });
             alertBuilder.show();
         }
+
+        HikingAPI hikingAPI = new HikingAPI(this);
+        hikingAPI.fetchTrailList(latitude,longitude);
     }
 
     public void receivedInterestingPhotos(List<Trail> trail) {
@@ -243,5 +238,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         Canvas canvas = new Canvas(bitmap);
         vectorDrawable.draw(canvas);
         return BitmapDescriptorFactory.fromBitmap(bitmap);
+    }
+
+    public void refresh(View view){
+        recreate();
     }
 }
