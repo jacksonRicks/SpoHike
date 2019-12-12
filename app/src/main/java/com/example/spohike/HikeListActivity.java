@@ -17,6 +17,12 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * HikeListActivity.java
+ * Jackson Ricks, Alex Weaver
+ * SpoHike
+ */
+
 public class HikeListActivity extends AppCompatActivity {
 
     List<Trail> trailList;
@@ -32,7 +38,7 @@ public class HikeListActivity extends AppCompatActivity {
         layoutParams.width = GridLayout.LayoutParams.MATCH_PARENT;
         layoutParams.height = GridLayout.LayoutParams.WRAP_CONTENT;
 
-        //trailList = (ArrayList<Trail>) getIntent().getSerializableExtra("trailList");
+
         Intent intent = getIntent();
         Bundle args = intent.getBundleExtra("BUNDLE");
         trailList = (ArrayList<Trail>) args.getSerializable("ARRAYLIST");

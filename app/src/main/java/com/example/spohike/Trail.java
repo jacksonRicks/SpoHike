@@ -3,6 +3,12 @@ package com.example.spohike;
 
 import java.io.Serializable;
 
+/**
+ * Trail.java
+ * Jackson Ricks, Alex Weaver
+ * SpoHike
+ */
+
 public class Trail implements Serializable {
     String id;
     String name;

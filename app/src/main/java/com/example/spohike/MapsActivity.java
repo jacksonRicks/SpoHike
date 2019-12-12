@@ -15,13 +15,10 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.drawable.Drawable;
 import android.location.Location;
-import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -36,8 +33,6 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.BitmapDescriptor;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -46,6 +41,12 @@ import com.google.android.gms.tasks.Task;
 
 import java.io.Serializable;
 import java.util.List;
+
+/**
+ * MapsActivity.java
+ * Jackson Ricks, Alex Weaver
+ * SpoHike
+ */
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback, GoogleMap.OnMyLocationClickListener {
     private FusedLocationProviderClient fusedLocationProviderClient;
@@ -56,8 +57,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     public LocationRequest locationRequest;
     String lat;
     String lon;
-    Double wayLatitude;
-    Double wayLongitude;
     LatLng gonzaga = new LatLng(47.6664,-117.40235);
     static final int MY_LOCATION_CODE = 1;
 
@@ -90,10 +89,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             }
         });
 
-
-
-//        HikingAPI hikingAPI = new HikingAPI(this);
-//        hikingAPI.fetchTrailList(47.666,-117.40235);
     }
 
 
@@ -140,8 +135,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         task.addOnSuccessListener(this, new OnSuccessListener<LocationSettingsResponse>() {
             @Override
             public void onSuccess(LocationSettingsResponse locationSettingsResponse) {
-                // All location settings are satisfied. The client can initialize
-                // location requests here.
             }
         });
 
@@ -165,8 +158,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     .addOnSuccessListener(this, new OnSuccessListener<Location>() {
                         @Override
                         public void onSuccess(Location location) {
-                            // Got last known location
-                            // In some rare situations this can be null
                             if (location != null) {
                                 mCurrentLocation = location;
                             }
@@ -185,6 +176,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(gonzaga, 10.0f));
 
 
+        // Custom Geofence interpretation
         LocationManager lm = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         Location location = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
         float[] dist = new float[1];
@@ -223,25 +215,19 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
     public void receivedInterestingPhotos(List<Trail> trail) {
+        // Zoom in on user's current location
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(
                 new LatLng(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude()), 10.0f));
-        //mMap.addMarker(new MarkerOptions()
-        //        .position(new LatLng(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude()))
-        //        .title("Home")
-        //        .icon(BitmapDescriptorFactory.fromResource(R.drawable.user)));
         TrailList = trail;
         for(int i = 0; i < TrailList.size(); i++) {
             nextTrail();
         }
     }
 
-
-
     public void nextTrail() {
         if (TrailList != null & TrailList.size() > 0) {
             currPhotoIndex++;
             currPhotoIndex %= TrailList.size();
-
 
             Trail trail = TrailList.get(currPhotoIndex);
             lon = trail.getLongitude();
@@ -254,31 +240,11 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             mMap.moveCamera(CameraUpdateFactory.newLatLng(cool));
 
 
-            //titleTextView.setText(interestingPhoto.getTitle());
-            //dateTakenTextView.setText(interestingPhoto.getDateTaken());
-
-            // GS: added after class
-            //FlickrAPI flickrAPI = new FlickrAPI(this);
-            //flickrAPI.fetchPhotoBitmap(interestingPhoto.getPhotoURL());
         }
-    }
-
-    private BitmapDescriptor bitmapDescriptorFromVector(Context context, int vectorResId) {
-        Drawable vectorDrawable = ContextCompat.getDrawable(context, vectorResId);
-        vectorDrawable.setBounds(0, 0, vectorDrawable.getIntrinsicWidth(), vectorDrawable.getIntrinsicHeight());
-        Bitmap bitmap = Bitmap.createBitmap(vectorDrawable.getIntrinsicWidth(), vectorDrawable.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
-        Canvas canvas = new Canvas(bitmap);
-        vectorDrawable.draw(canvas);
-        return BitmapDescriptorFactory.fromBitmap(bitmap);
     }
 
     public void refresh(View view){
         recreate();
     }
 
-    // GS: added after class
-    public void receivedPhotoBitmap(Bitmap bitmap) {
-        //ImageView imageView = findViewById(R.id.imageView);
-        //imageView.setImageBitmap(bitmap);
-    }
 }

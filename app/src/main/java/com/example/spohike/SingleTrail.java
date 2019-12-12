@@ -15,7 +15,17 @@ import android.widget.TextView;
 
 import org.w3c.dom.Text;
 
+import java.io.IOException;
 import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
+
+/**
+ * SingleTrail.java
+ * Jackson Ricks, Alex Weaver
+ * SpoHike
+ */
 
 public class SingleTrail extends AppCompatActivity {
 
@@ -28,19 +38,11 @@ public class SingleTrail extends AppCompatActivity {
         if (intent != null ) {
             Trail trail = (Trail) intent.getSerializableExtra("trail");
 
-
             setCurrentValues(trail);
         }
 
-
-
     }
 
-    // GS: added after class
-    public void receivedPhotoBitmap(Bitmap bitmap) {
-        //ImageView imageView = findViewById(R.id.imageView);
-        //imageView.setImageBitmap(bitmap);
-    }
 
     public void setCurrentValues(Trail trail){
         TextView name = (TextView) findViewById(R.id.Name);
@@ -52,42 +54,41 @@ public class SingleTrail extends AppCompatActivity {
         name.setText(trail.getName());
         stars.setText("Stars: " + trail.getStars());
         summary.setText(trail.getSummary());
-        location.setText("Lat: " + trail.getLatitude() + "\n" + "Lon: " + trail.getLongitude());
+        location.setText("(Lat, Lon): (" + trail.getLatitude() + ", " + trail.getLongitude() + ")");
         length.setText(trail.getLength() + " miles");
-        new DownloadImageTask((ImageView) findViewById(R.id.image)).execute(trail.getPhotoURL());
+        new GetImage((ImageView) findViewById(R.id.image)).execute(trail.getPhotoURL());
     }
 
-    private class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
-        ImageView bmImage;
+    private class GetImage extends AsyncTask<String, Void, Bitmap> {
+        ImageView image;
 
-        public DownloadImageTask(ImageView bmImage) {
-            this.bmImage = bmImage;
+        public GetImage(ImageView image) {
+            this.image = image;
         }
 
-        @Override
-//        protected void onPreExecute() {
-//            super.onPreExecute();
-//            ProgressBar progressBar = (ProgressBar) findViewById(R.id.progressBar);
-//            progressBar.setVisibility(View.VISIBLE);
-//        }
 
-        protected Bitmap doInBackground(String... urls) {
-            String urldisplay = urls[0];
-            Bitmap mIcon11 = null;
+        protected Bitmap doInBackground(String... strings) {
+            Bitmap bitmap = null;
+
             try {
-                InputStream in = new java.net.URL(urldisplay).openStream();
-                mIcon11 = BitmapFactory.decodeStream(in);
-            } catch (Exception e) {
-                Log.e("Error", e.getMessage());
+                URL url = new URL(strings[0]);
+                HttpURLConnection urlConnection = (HttpURLConnection)
+                        url.openConnection();
+
+                InputStream in = urlConnection.getInputStream();
+                bitmap = BitmapFactory.decodeStream(in);
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
                 e.printStackTrace();
             }
-            return mIcon11;
+
+            return bitmap;
         }
 
         protected void onPostExecute(Bitmap result) {
-//            ProgressBar progressBar = (ProgressBar) findViewById(R.id.progressBar);
-//            progressBar.setVisibility(View.GONE);
-            bmImage.setImageBitmap(result);
+
+            image.setImageBitmap(result);
         }
     }
 }
